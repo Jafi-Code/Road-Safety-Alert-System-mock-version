@@ -54,6 +54,42 @@ class UIManager {
         document.addEventListener('tab-changed', (event) => {
             this.onTabChange(event.detail);
         });
+
+        // Close sidebar when clicking outside (for small screens)
+        document.addEventListener('click', (e) => {
+            try {
+                const sidebar = document.querySelector('.sidebar');
+                const toggleBtn = document.querySelector('.menu-toggle');
+                if (!sidebar) return;
+
+                const isActive = sidebar.classList.contains('active');
+                if (!isActive) return;
+
+                // Only apply this behavior on smaller viewports where sidebar is toggled
+                if (window.innerWidth <= 1200) {
+                    const target = e.target;
+                    if (!sidebar.contains(target) && !(toggleBtn && toggleBtn.contains(target))) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            } catch (err) {
+                console.warn('Error in sidebar outside-click handler', err);
+            }
+        });
+
+        // Close sidebar with Escape key (for small screens)
+        document.addEventListener('keydown', (e) => {
+            try {
+                if (e.key === 'Escape') {
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar && sidebar.classList.contains('active') && window.innerWidth <= 1200) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            } catch (err) {
+                console.warn('Error handling Escape key for sidebar', err);
+            }
+        });
     }
 
     static startUIUpdates() {

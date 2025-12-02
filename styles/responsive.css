@@ -56,3 +56,10 @@
         width: 100%;
     }
 }
+
+/* Hide the header menu toggle on wide screens (desktop) so toggle only appears on smaller viewports */
+@media (min-width: 1201px) {
+    .menu-toggle {
+        display: none;
+    }
+}
