@@ -12,6 +12,7 @@
     gap: 0.5rem;
     transition: var(--transition);
     font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .btn:hover {
@@ -53,6 +54,12 @@
     color: white;
 }
 
+/* Small buttons for mobile */
+.btn-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+}
+
 /* Map buttons */
 .btn-map {
     background: rgba(30, 41, 59, 0.8);
@@ -67,4 +74,24 @@
 .btn-map:hover {
     background: var(--primary);
     color: white;
+}
+
+@media (max-width: 768px) {
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .btn-sm {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        min-height: 40px;
+    }
 }

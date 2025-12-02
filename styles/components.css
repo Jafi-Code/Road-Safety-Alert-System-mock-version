@@ -6,6 +6,8 @@
     border: 1px solid var(--border);
     overflow: hidden;
     transition: var(--transition);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .card:hover {
@@ -26,11 +28,24 @@
     gap: 0.5rem;
     transition: var(--transition);
     font-size: 0.9rem;
+    word-break: break-word;
 }
 
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow);
+}
+
+/* Prevent text overflow in tables */
+table {
+    width: 100%;
+    table-layout: auto;
+    word-wrap: break-word;
+}
+
+td, th {
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 /* ... rest of component styles ... */
