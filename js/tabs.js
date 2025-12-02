@@ -36,8 +36,42 @@ class TabManager {
         // Initialize all tabs
         await this.initializeAllTabs();
         
+        // Priority for deep-links: query param `?tab=map`, then URL hash `#map`, then pathname last segment
+        // This helps GitHub Pages links like `index.html?tab=map` or `index.html#map` work.
+        const params = new URLSearchParams(window.location.search);
+        const qTab = params.get('tab');
+        if (qTab && this.tabs[qTab]) {
+            this.currentTab = qTab;
+        } else {
+            // If query param not present, check hash
+            const hash = window.location.hash.replace('#', '');
+            if (hash && this.tabs[hash]) {
+                this.currentTab = hash;
+            } else {
+                // As a last resort, check the last path segment (useful if a link like /repo-name/map is used
+                // and the hosting rewrites to index.html). This will be ignored when the path is just the repo root.
+                try {
+                    const pathSegs = window.location.pathname.split('/').filter(s => s.length > 0);
+                    const lastSeg = pathSegs.length ? pathSegs[pathSegs.length - 1] : '';
+                    if (lastSeg && this.tabs[lastSeg]) {
+                        this.currentTab = lastSeg;
+                    }
+                } catch (err) {
+                    // ignore any errors parsing the path
+                }
+            }
+        }
+
         // Show current tab
         this.switchToTab(this.currentTab);
+
+        // Listen to hash changes so external links work
+        window.addEventListener('hashchange', () => {
+            const newHash = window.location.hash.replace('#', '');
+            if (newHash && this.tabs[newHash]) {
+                this.switchToTab(newHash);
+            }
+        });
         
         return true;
     }
@@ -117,6 +151,15 @@ class TabManager {
             detail: { tabId, tabName: this.getTabName(tabId) }
         });
         document.dispatchEvent(event);
+
+        // Update URL hash so links/bookmarks work
+        try {
+            if (window.location.hash.replace('#', '') !== tabId) {
+                window.location.hash = tabId;
+            }
+        } catch (err) {
+            // ignore if cannot write hash (unlikely)
+        }
 
         console.log(`Switched to tab: ${tabId}`);
     }
