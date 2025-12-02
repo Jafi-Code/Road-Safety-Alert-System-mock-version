@@ -1,0 +1,45 @@
+/* Alert List */
+.alert-list {
+    padding: 1rem;
+}
+
+.alert-item {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid var(--danger);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.alert-item:hover {
+    background: rgba(239, 68, 68, 0.2);
+    transform: translateX(4px);
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.alert-protocol {
+    font-weight: bold;
+    color: var(--danger);
+}
+
+.alert-confidence {
+    background: rgba(239, 68, 68, 0.3);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.alert-placeholder {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+}

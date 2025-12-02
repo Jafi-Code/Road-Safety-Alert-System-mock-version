@@ -1,0 +1,10 @@
+/* Map */
+#map-container {
+    height: 300px;
+    position: relative;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}

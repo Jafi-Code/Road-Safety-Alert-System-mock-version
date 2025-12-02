@@ -1,0 +1,49 @@
+/* Resource Grid */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.resource-item {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.resource-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.resource-placeholder {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.resource-total {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.resource-total .available {
+    color: var(--success);
+    font-weight: bold;
+}
+
+.resource-total .total {
+    color: var(--text);
+    font-weight: bold;
+}
+
+.deployment-actions {
+    padding: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}

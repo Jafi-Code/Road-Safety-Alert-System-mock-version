@@ -1,0 +1,610 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Safety Alert System | Real-Time Safety Intelligence</title>
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/cards.css">
+    <link rel="stylesheet" href="styles/alerts.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/map.css">
+    <link rel="stylesheet" href="styles/resources.css">
+    <link rel="stylesheet" href="styles/analytics.css">
+    <link rel="stylesheet" href="styles/simulation.css">
+    <link rel="stylesheet" href="styles/notifications.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-small">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Road Safety<br>Alert System</h2>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active" onclick="switchTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('alerts')">
+                <i class="fas fa-bell"></i>
+                <span>Active Alerts</span>
+                <span class="menu-badge">5</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('map')">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Risk Map</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('protocols')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Protocols</span>
+                <span class="menu-badge">4</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('resources')">
+                <i class="fas fa-users-cog"></i>
+                <span>Resources</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('analytics')">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('playbook')">
+                <i class="fas fa-robot"></i>
+                <span>AI Playbook</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <a href="#" class="menu-item" onclick="switchTab('simulation')">
+                <i class="fas fa-vial"></i>
+                <span>Simulation Lab</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('reports')">
+                <i class="fas fa-file-alt"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('settings')">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Traffic Control</span>
+                    <span class="user-role">Command Center</span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>Prevention Command Center</h1>
+                    <p class="subtitle">Real-time road safety orchestration</p>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="system-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Active Triggers</span>
+                        <span class="stat-value" id="live-trigger-count">5</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Response Time</span>
+                        <span class="stat-value" id="response-time">8.2s</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Uptime</span>
+                        <span class="stat-value" id="uptime">99.8%</span>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <button class="header-btn" onclick="toggleEmergencyMode()">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Emergency Mode</span>
+                    </button>
+                    <button class="header-btn" onclick="refreshDashboard()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="time-display" id="current-time">
+                        14:30:45
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="dashboard-content" id="dashboard-content">
+            <!-- This content will be dynamically loaded based on tab selection -->
+            
+            <!-- Default Dashboard View -->
+            <div id="tab-dashboard" class="tab-content active">
+                <!-- Alert Summary -->
+                <div class="dashboard-grid">
+                    <div class="card alert-summary">
+                        <div class="card-header">
+                            <h2><i class="fas fa-bell"></i> Active Triggers</h2>
+                            <button class="btn-view-all" onclick="switchTab('alerts')">
+                                View All <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="alert-list" id="alert-list">
+                            <!-- Alerts loaded via JavaScript -->
+                            <div class="alert-placeholder">
+                                <p>Loading alerts...</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" onclick="simulateNewTrigger()">
+                                <i class="fas fa-plus"></i> Simulate New Trigger
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Map -->
+                    <div class="card live-map">
+                        <div class="card-header">
+                            <h2><i class="fas fa-map-marked-alt"></i> Risk Heat Map</h2>
+                            <div class="map-controls">
+                                <button class="btn-map" onclick="zoomToJohannesburg()">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                                <button class="btn-map" onclick="toggleTrafficLayers()">
+                                    <i class="fas fa-car"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="map-container">
+                            <div id="map"></div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-info" onclick="updateMapData()">
+                                <i class="fas fa-sync-alt"></i> Refresh Map Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resource Status -->
+                    <div class="card resource-status">
+                        <div class="card-header">
+                            <h2><i class="fas fa-users-cog"></i> Resource Status</h2>
+                            <div class="resource-total">
+                                <span class="available" id="available-resources">12</span>/<span class="total" id="total-resources">20</span> Available
+                            </div>
+                        </div>
+                        <div class="resource-grid" id="resource-grid">
+                            <!-- Resources loaded via JavaScript -->
+                            <div class="resource-placeholder">
+                                <p>Loading resources...</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-secondary" onclick="deployResources()">
+                                <i class="fas fa-paper-plane"></i> Deploy Resources
+                            </button>
+                            <button class="btn btn-warning" onclick="optimizeResourceAllocation()">
+                                <i class="fas fa-brain"></i> AI Optimize
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Playbook -->
+                    <div class="card ai-playbook">
+                        <div class="card-header">
+                            <h2><i class="fas fa-robot"></i> AI Playbook</h2>
+                            <div class="ai-score">
+                                <span class="score" id="ai-effectiveness">92.5%</span>
+                                <span class="score-label">Effectiveness</span>
+                            </div>
+                        </div>
+                        <div class="protocol-performance" id="protocol-performance">
+                            <!-- Protocols loaded via JavaScript -->
+                            <div class="protocol-placeholder">
+                                <p>Loading protocol performance...</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success" onclick="trainPlaybook()">
+                                <i class="fas fa-brain"></i> Train AI
+                            </button>
+                            <button class="btn btn-warning" onclick="resetPlaybook()">
+                                <i class="fas fa-redo"></i> Reset Learning
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Impact Analytics -->
+                    <div class="card impact-analytics">
+                        <div class="card-header">
+                            <h2><i class="fas fa-chart-line"></i> Prevention Impact</h2>
+                            <div class="time-selector">
+                                <select id="time-period" onchange="updateImpactChart()">
+                                    <option value="24h">Last 24 Hours</option>
+                                    <option value="7d" selected>Last 7 Days</option>
+                                    <option value="30d">Last 30 Days</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="impact-metrics">
+                            <div class="impact-metric">
+                                <div class="metric-value" id="accidents-prevented">42</div>
+                                <div class="metric-label">Accidents Prevented</div>
+                            </div>
+                            <div class="impact-metric">
+                                <div class="metric-value" id="lives-saved">4.2</div>
+                                <div class="metric-label">Lives Saved</div>
+                            </div>
+                            <div class="impact-metric">
+                                <div class="metric-value" id="economic-impact">R21M</div>
+                                <div class="metric-label">Economic Impact</div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="impact-chart"></canvas>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" onclick="exportImpactData()">
+                                <i class="fas fa-download"></i> Export Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Simulation Controls -->
+                    <div class="card simulation-controls">
+                        <div class="card-header">
+                            <h2><i class="fas fa-vial"></i> Simulation Lab</h2>
+                            <div class="sim-status">
+                                <span class="status-dot active"></span>
+                                <span id="sim-status">Ready</span>
+                            </div>
+                        </div>
+                        <div class="sim-scenarios">
+                            <h3>Test Scenarios</h3>
+                            <div class="scenario-buttons">
+                                <button class="btn-scenario" onclick="runScenario('rush_hour')">
+                                    <i class="fas fa-car"></i>
+                                    <span>Rush Hour</span>
+                                </button>
+                                <button class="btn-scenario" onclick="runScenario('school_zone')">
+                                    <i class="fas fa-school"></i>
+                                    <span>School Zone</span>
+                                </button>
+                                <button class="btn-scenario" onclick="runScenario('weekend_night')">
+                                    <i class="fas fa-moon"></i>
+                                    <span>Weekend Night</span>
+                                </button>
+                                <button class="btn-scenario" onclick="runScenario('weather_emergency')">
+                                    <i class="fas fa-cloud-showers-heavy"></i>
+                                    <span>Weather Emergency</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="sim-results" id="sim-results">
+                            <h3>Last Simulation</h3>
+                            <div class="result-metric">
+                                <span class="result-label">Risk Reduction:</span>
+                                <span class="result-value" id="last-risk-reduction">68%</span>
+                            </div>
+                            <div class="result-metric">
+                                <span class="result-label">Response Time:</span>
+                                <span class="result-value" id="last-response-time">7.4s</span>
+                            </div>
+                            <div class="result-metric">
+                                <span class="result-label">Accuracy:</span>
+                                <span class="result-value" id="last-accuracy">94%</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-danger" onclick="runAllScenarios()">
+                                <i class="fas fa-play-circle"></i> Run All Tests
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other tabs will be loaded dynamically -->
+            <div id="tab-alerts" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-bell"></i> Active Alerts</h2>
+                    <p>Loading alerts data...</p>
+                </div>
+            </div>
+            <div id="tab-map" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-map-marked-alt"></i> Risk Map</h2>
+                    <p>Loading interactive map...</p>
+                </div>
+            </div>
+            <div id="tab-protocols" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-clipboard-list"></i> Protocols</h2>
+                    <p>Loading safety protocols...</p>
+                </div>
+            </div>
+            <div id="tab-resources" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-users-cog"></i> Resources</h2>
+                    <p>Loading resource management...</p>
+                </div>
+            </div>
+            <div id="tab-analytics" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-chart-line"></i> Analytics</h2>
+                    <p>Loading analytics dashboard...</p>
+                </div>
+            </div>
+            <div id="tab-playbook" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-robot"></i> AI Playbook</h2>
+                    <p>Loading AI playbook...</p>
+                </div>
+            </div>
+            <div id="tab-simulation" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-vial"></i> Simulation Lab</h2>
+                    <p>Loading simulation interface...</p>
+                </div>
+            </div>
+            <div id="tab-reports" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-file-alt"></i> Reports</h2>
+                    <p>Loading report generator...</p>
+                </div>
+            </div>
+            <div id="tab-settings" class="tab-content">
+                <div class="tab-placeholder">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <p>Loading settings panel...</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Notification System -->
+        <div class="notification-container" id="notification-container">
+            <!-- Notifications will appear here -->
+        </div>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Application Configuration -->
+    <script src="config.js"></script>
+    
+    <!-- Core Modules -->
+    <script src="js/data.js"></script>
+    <script src="js/ml-integration.js"></script>
+    <script src="js/api/simulation.js"></script>
+    
+    <!-- UI Modules -->
+    <script src="js/tabs.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/ui.js"></script>
+    
+    <!-- Main Application -->
+    <script src="js/app.js"></script>
+
+    <!-- Global Helper Functions -->
+    <script>
+        // Global utility functions
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        function switchTab(tabId) {
+            if (window.app && window.app.switchTab) {
+                window.app.switchTab(tabId);
+            } else {
+                console.warn('App not initialized yet');
+                // Fallback basic tab switching
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+                
+                // Update sidebar
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`.menu-item[onclick*="${tabId}"]`).classList.add('active');
+            }
+        }
+
+        function toggleEmergencyMode() {
+            if (window.app && window.app.toggleEmergencyMode) {
+                window.app.toggleEmergencyMode();
+            } else {
+                const btn = document.querySelector('.header-btn');
+                const isEmergency = btn.classList.toggle('emergency-active');
+                btn.innerHTML = isEmergency ? 
+                    '<i class="fas fa-exclamation-triangle"></i><span>Emergency Active</span>' :
+                    '<i class="fas fa-exclamation-triangle"></i><span>Emergency Mode</span>';
+                
+                document.body.classList.toggle('emergency-mode', isEmergency);
+            }
+        }
+
+        function refreshDashboard() {
+            if (window.app && window.app.refreshDashboard) {
+                window.app.refreshDashboard();
+            } else {
+                location.reload();
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear any stored data
+                localStorage.removeItem('preventionData');
+                localStorage.removeItem('orchestratorState');
+                
+                // Redirect to login (in a real app)
+                alert('Logged out successfully. In a real application, this would redirect to login page.');
+                // window.location.href = 'login.html';
+            }
+        }
+
+        // Placeholder functions that will be implemented in modules
+        function simulateNewTrigger() {
+            if (window.app && window.app.simulateNewTrigger) {
+                window.app.simulateNewTrigger();
+            } else {
+                alert('Simulating new trigger... (App not fully initialized)');
+            }
+        }
+
+        function deployResources() {
+            if (window.app && window.app.deployResources) {
+                window.app.deployResources();
+            } else {
+                alert('Resource deployment triggered... (App not fully initialized)');
+            }
+        }
+
+        function trainPlaybook() {
+            if (window.app && window.app.trainPlaybook) {
+                window.app.trainPlaybook();
+            } else {
+                alert('AI training started... (App not fully initialized)');
+            }
+        }
+
+        function resetPlaybook() {
+            if (window.app && window.app.resetPlaybook) {
+                window.app.resetPlaybook();
+            } else {
+                alert('Playbook reset... (App not fully initialized)');
+            }
+        }
+
+        function runScenario(scenarioType) {
+            if (window.app && window.app.runScenario) {
+                window.app.runScenario(scenarioType);
+            } else {
+                alert(`Running ${scenarioType} scenario... (App not fully initialized)`);
+            }
+        }
+
+        function runAllScenarios() {
+            if (window.app && window.app.runAllScenarios) {
+                window.app.runAllScenarios();
+            } else {
+                alert('Running all test scenarios... (App not fully initialized)');
+            }
+        }
+
+        function zoomToJohannesburg() {
+            if (window.MapManager && window.MapManager.zoomToJohannesburg) {
+                window.MapManager.zoomToJohannesburg();
+            }
+        }
+
+        function toggleTrafficLayers() {
+            if (window.MapManager && window.MapManager.toggleTrafficLayers) {
+                window.MapManager.toggleTrafficLayers();
+            }
+        }
+
+        function updateMapData() {
+            if (window.MapManager && window.MapManager.updateMapData) {
+                window.MapManager.updateMapData();
+            }
+        }
+
+        function optimizeResourceAllocation() {
+            if (window.app && window.app.optimizeResourceAllocation) {
+                window.app.optimizeResourceAllocation();
+            } else {
+                alert('AI resource optimization started...');
+            }
+        }
+
+        function exportImpactData() {
+            if (window.app && window.app.exportImpactData) {
+                window.app.exportImpactData();
+            } else {
+                alert('Exporting impact data...');
+            }
+        }
+
+        function updateImpactChart() {
+            if (window.app && window.app.updateImpactChart) {
+                window.app.updateImpactChart();
+            }
+        }
+
+        // Initialize time display
+        function updateTimeDisplay() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // Start time updates
+        setInterval(updateTimeDisplay, 1000);
+        updateTimeDisplay();
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Prevention Orchestrator loading...');
+            
+            // Initialize time display
+            updateTimeDisplay();
+            
+            // Check for saved state
+            const savedState = localStorage.getItem('orchestratorState');
+            if (savedState) {
+                try {
+                    const state = JSON.parse(savedState);
+                    if (state.currentTab) {
+                        setTimeout(() => switchTab(state.currentTab), 100);
+                    }
+                } catch (e) {
+                    console.warn('Could not load saved state:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
