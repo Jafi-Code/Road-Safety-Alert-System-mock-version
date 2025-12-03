@@ -68,7 +68,12 @@ class UIManager {
                 // Only apply this behavior on smaller viewports where sidebar is toggled
                 if (window.innerWidth <= 1200) {
                     const target = e.target;
-                    if (!sidebar.contains(target) && !(toggleBtn && toggleBtn.contains(target))) {
+                    const clickedOnToggle = toggleBtn && (toggleBtn === target || toggleBtn.contains(target));
+                    const clickedInSidebar = sidebar.contains(target);
+                    
+                    // Close if click is NOT on toggle and NOT inside sidebar
+                    if (!clickedOnToggle && !clickedInSidebar) {
+                        console.log('Outside click detected, closing sidebar');
                         sidebar.classList.remove('active');
                     }
                 }

@@ -102,7 +102,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <button class="menu-toggle" onclick="toggleSidebar()">
+                <button class="menu-toggle" onclick="toggleSidebar(event)">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title">
@@ -419,9 +419,16 @@
     <!-- Global Helper Functions -->
     <script>
         // Global utility functions
-        function toggleSidebar() {
+        function toggleSidebar(event) {
+            // Prevent the click from bubbling to the outside-click handler
+            if (event) {
+                event.stopPropagation();
+            }
             const sidebar = document.querySelector('.sidebar');
+            if (!sidebar) return;
             sidebar.classList.toggle('active');
+            const isNowActive = sidebar.classList.contains('active');
+            console.log('Sidebar toggle clicked. Sidebar is now:', isNowActive ? 'OPEN' : 'CLOSED');
         }
 
         function switchTab(tabId) {
